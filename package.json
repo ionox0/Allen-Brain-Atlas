@@ -8,5 +8,9 @@
     "start": "node server.js"
   },
   "author": "ianj",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.0.0",
+    "pg": "^3.0.3"
+  }
 }
