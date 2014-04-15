@@ -11,10 +11,8 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-casper');
   grunt.loadNpmTasks('grunt-sass');
-  grunt.loadNpmTasks('grunt-mongoimport');
   grunt.loadNpmTasks('grunt-notify');
   grunt.loadNpmTasks('grunt-env');
-  grunt.loadNpmTasks('grunt-mongo-drop');
   grunt.loadNpmTasks('grunt-mocha-cov');
   grunt.loadNpmTasks('grunt-concurrent');
   grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -30,17 +28,6 @@ module.exports = function (grunt) {
       },
       test: {
         NODE_ENV: 'test'
-      }
-    },
-    casper: {
-      acceptance : {
-        options : {
-          test : true,
-          //'log-level': 'debug'
-        },
-        files : {
-          'test/acceptance/casper-results.xml' : ['test/acceptance/*_test.js']
-        }
       }
     },
     clean: {
@@ -141,6 +128,17 @@ module.exports = function (grunt) {
         colors: true
       }
     },
+    casper: {
+      acceptance : {
+        options : {
+          test : true,
+          //'log-level': 'debug'
+        },
+        files : {
+          'test/acceptance/casper-results.xml' : ['test/acceptance/*_test.js']
+        }
+      }
+    },
     express: {
       options: {
         // Override defaults here
@@ -175,20 +173,14 @@ module.exports = function (grunt) {
       dev: {
         files: ['app/js/model/**/*'],
         tasks: ['server']
-      },
-      backbone: {
-        files: ['app/js/backbone/**/*.js'],
-        tasks: ['build:dev', 'express:dev']
-      },
-      notest: {
-        files: ['server.js', 'test/**.js', 'app/**/*', 'api/**/*'],
-        options: {
-          livereload: true
-        },
-        tasks: ['build:dev']
       }
     }
   });
 
-grunt.registerTask('default',['express:dev', 'watch:express']);
+grunt.registerTask('default', ['express:dev']);
+grunt.registerTask('server', ['build:dev', 'express:dev','watch:all']);
+grunt.registerTask('test', ['mochacov:unit', 'mochacov:coverage', 'casper']);
+grunt.registerTask('build:dev', ['clean:dev', 'sass:dev', 'copy:dev', 'browserify:dev', 'uglify']);
+grunt.registerTask('build:prod', ['clean:prod', 'sass:prod', 'copy:prod', 'browserify:prod', 'uglify']);
+
 };
