@@ -33,7 +33,13 @@ describe('API TESTS \n', function(){
     superagent.get('localhost:3000/api/v1/samples/4077').end(function(e, res){
       expect(e).to.eql(null);
       expect(res.body.rows[0].structure_id).to.eql(4077);
-      console.log(res.body.rows[0].structure_id, res.body.rows[0].structure_acronym, res.body.rows[0].mri_voxel_x);
+      console.log(
+        res.body.rows[0].structure_id,
+        res.body.rows[0].structure_acronym,
+        res.body.rows[0].mri_voxel_x,
+        res.body.rows[0].mri_voxel_y,
+        res.body.rows[0].mri_voxel_z
+        );
       done();
     });
   });
