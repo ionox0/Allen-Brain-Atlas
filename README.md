@@ -5,3 +5,4 @@ Brain visualization in Three.js using data from the Allen Institute for Brain Sc
 
 (still in development, requires postgres DB setup)
 
+[Allen Brain Atlas](http://www.brain-map.org/)
