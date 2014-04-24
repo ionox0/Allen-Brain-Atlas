@@ -6,4 +6,4 @@ Brain visualization in Three.js using data from the Allen Institute for Brain Sc
 
 grunt build:dev --> grunt
 
-search using a gene apprev (e.g. AGXT)
+search using a gene abbrev (e.g. AGXT)
