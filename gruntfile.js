@@ -21,7 +21,7 @@ module.exports = function(grunt){
       dev: {
         expand: true,
         cwd: 'app',
-        src: ['**/*'],
+        src: ['**/*', '!three.js-master/**/*', 'three.js-master/build/three.min.js'],
         dest: 'build/',
         flatten: false,
         filter: 'isFile'
@@ -130,6 +130,6 @@ module.exports = function(grunt){
 
 grunt.registerTask('default',['express:dev', 'watch:express']);
 grunt.registerTask('build:dev', ['clean:dev', 'copy:dev']);
-grunt.registerTask('test', ['mochacov:unit', 'mochacov:coverage', 'casper']);
+grunt.registerTask('test', ['mochacov:unit']);
 
 };

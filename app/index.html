@@ -1,60 +1,87 @@
 <html>
 <head>
   <title>Allen Brain Atlas</title>
-  <style>canvas { width: 100%; height: 90% }</style>
+  <style>canvas { width: 100%; height: 100% }</style>
 </head>
 <body>
+  <input type="text" id="gene"></input><button id="find">Find</button>
   <script src="three.js-master/build/three.min.js"></script>
   <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
   <script>
 
-    var data;
+    //get data from api
+    $('#find').on( "click", function () {
 
-    $(document).ready(function () {
+      $('canvas').remove();
+      var probes, exprVals, samples;
+      var geneName = $('#gene').val();
 
-      //get data
-      $.get('/api/v1/exprVals/:4077', function(data2){
-        data = data2;
-        console.log(data2);
-      });
+      $.get('/api/v1/probes/' + geneName, function(data){
 
-    });
+        probe_id = data.rows[0].probe_id;
 
-    console.log(data);
+        for (var i = 1; i < data.rows.length; i++){
+          probe_id += " OR probe_id = " + data.rows[i].probe_id;
+        }
 
-    //threejs
-    renderer = new THREE.WebGLRenderer();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(renderer.domElement);
-    camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 500);
-    camera.position.set(0, 0, 100);
-    camera.lookAt(new THREE.Vector3(0, 0, 0));
-    scene = new THREE.Scene();
+        $.get('/api/v1/exprVals/' + probe_id, function(data2){
 
-    var material = new THREE.LineBasicMaterial({
-      color: 0x0000ff
-    });
+          exprVals = data2;
+          console.log(exprVals);
 
-    var particle = new THREE.Vertex(
-      new THREE.Vector3(0, 0, 0)
-      );
+          $.get('/api/v1/allSamples', function(data3){
 
-    var brain = new THREE.Geometry();
+            samples = data3;
 
-    brain.vertices.push( new THREE.Vector3( -20,  10, 0 ) );
-    brain.vertices.push( new THREE.Vector3( -10, -10, 0 ) );
-    brain.vertices.push( new THREE.Vector3(  10, -10, 0 ) );
-    brain.faces.push( new THREE.Face3( 0, 1, 2 ) );
-    brain.computeBoundingSphere();
+            //threejs
+            renderer = new THREE.WebGLRenderer();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+            camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 5000);
+            camera.position.set(0, 0, 200);
+            scene = new THREE.Scene();
 
-    var object = new THREE.Mesh(brain, material);
+            var object;
+            var brain = new THREE.Geometry();
+            var pMaterial = new THREE.ParticleBasicMaterial({
+              color: 0x2255FF,
+              size: 1,
+              blending: THREE.AdditiveBlending,
+              transparent: true
+            });
 
+            var numProbes = exprVals.rows.length;
 
-    scene.add(object);
+            for (var i = 1; i < exprVals.fields.length - 1; i++){
+              for (var j = 0; j < numProbes; j++){
+                if (exprVals.rows[j]['h' + i] == true){
+                  brain.vertices.push( new THREE.Vector3(
+                    samples.rows[i].mni_y,
+                    samples.rows[i].mni_z,
+                    samples.rows[i].mni_x
+                    ));
+                  break;
+                }
+              }
+            }
 
+            object = new THREE.ParticleSystem(brain, pMaterial);
+            scene.add(object);
+            var render = function () {
+              requestAnimationFrame(render);
+              object.rotation.y += 0.01;
+              renderer.render(scene, camera);
+            };
+            render();
 
-    renderer.render(scene, camera);
+          });
 
-  </script>
+});
+
+});
+
+});
+
+</script>
 </body>
 </html>

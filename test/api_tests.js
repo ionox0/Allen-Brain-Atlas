@@ -10,7 +10,7 @@ app = require('../server').app;
 describe('API TESTS \n', function(){
 
   it('can get a gene\'s probes', function(done){
-    superagent.get('localhost:3000/api/v1/probes/186').end(function(e, res){
+    superagent.get('localhost:3000/api/v1/probes/AGXT').end(function(e, res){
       expect(e).to.eql(null);
       expect(res.body.rows[0].gene_symbol).to.eql('AGXT');
       for (var i = 0; i < res.body.rows.length; i++)
