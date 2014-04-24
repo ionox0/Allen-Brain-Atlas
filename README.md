@@ -3,7 +3,5 @@ Allen-Brain-Atlas
 
 Brain visualization in Three.js using data from the Allen Institute for Brain Science
 
+(still in development, requires postgres DB setup)
 
-grunt build:dev --> grunt
-
-search using a gene abbrev (e.g. AGXT)
