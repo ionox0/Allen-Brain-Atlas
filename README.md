@@ -3,6 +3,10 @@ Allen-Brain-Atlas
 
 Brain visualization in Three.js using data from the Allen Institute for Brain Science
 
-(still in development, requires postgres DB setup)
+This repo requires postgres DB setup with tables from Allen Institute gene microarray expression data.
 
-[Allen Brain Atlas](http://www.brain-map.org/)
+The V2 project uses their api directly, and does not require this setup:
+[ionox0 Brain Atlas V2](http://brain.ianjohnson.co)
+https://github.com/ionox0/Allen-Brain-Atlas-V2
+
+[Allen Institute Website](http://www.brain-map.org/)
